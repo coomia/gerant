@@ -3,7 +3,6 @@ package com.fireflyi.gn.gerant.service;
 import com.fireflyi.gn.gerant.core.annotation.Gnamed;
 import com.fireflyi.gn.gerant.core.aop.GerantMethodInterceptor;
 import com.fireflyi.gn.gerant.common.util.PropertyUtil;
-import com.fireflyi.gn.gerant.service.core.GerantSocketServer;
 import com.google.inject.*;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
@@ -14,10 +13,10 @@ import com.google.inject.name.Names;
  * @date 2019/7/22
  * DESC TODO
  */
-public class Application {
+public class NioServerLaunches {
 
     @Inject
-    GerantSocketServer gerantSocketServer;
+    GerantSocketApplication gerantSocketServer;
 
     public static void main(String[] a){
 
@@ -32,7 +31,7 @@ public class Application {
                 binder.bindInterceptor(Matchers.any(), Matchers.annotatedWith(Gnamed.class), new GerantMethodInterceptor());
             }
         });
-        GerantSocketServer gss = injector.getInstance(Application.class).gerantSocketServer;
+        GerantSocketApplication gss = injector.getInstance(NioServerLaunches.class).gerantSocketServer;
     }
 
 }

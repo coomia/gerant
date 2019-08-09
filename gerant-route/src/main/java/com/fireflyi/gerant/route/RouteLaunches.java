@@ -21,13 +21,15 @@ public class RouteLaunches {
 
     public static void main(String[] a){
 
-        final String file = "config/guice.properties";
+        final String file = "route.properties";
         final String cacheFile = "config/cache.properties";
+        final String guice = "config/guice.properties";
 
         Injector injector = Guice.createInjector(new Module() {
             @Override
             public void configure(Binder binder) {
                 Names.bindProperties(binder, PropertyUtil.loadFile(file, getClass()));
+                Names.bindProperties(binder, PropertyUtil.loadFile(guice, getClass()));
                 Names.bindProperties(binder, PropertyUtil.loadFile(cacheFile, getClass()));
                 binder.bindInterceptor(Matchers.any(), Matchers.annotatedWith(Gnamed.class), new GerantMethodInterceptor());
             }

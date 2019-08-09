@@ -1,7 +1,6 @@
 package com.fireflyi.gerant.mcenter.core.impl;
 
 import com.fireflyi.gerant.mcenter.core.McenterHandlerAdapter;
-import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.domain.enumentity.CmdIdEnum;
 import com.google.inject.Singleton;
 

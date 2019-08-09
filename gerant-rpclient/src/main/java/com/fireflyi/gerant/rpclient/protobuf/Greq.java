@@ -18,6 +18,8 @@ private static final long serialVersionUID = 0L;
   private Greq() {
     cmdId_ = "";
     reqMsg_ = "";
+    uid_ = "";
+    objId_ = "";
   }
 
   @java.lang.Override
@@ -62,12 +64,19 @@ private static final long serialVersionUID = 0L;
             reqMsg_ = s;
             break;
           }
-          case 24: {
+          case 26: {
+            java.lang.String s = input.readStringRequireUtf8();
 
-            objId_ = input.readInt32();
+            uid_ = s;
             break;
           }
-          case 32: {
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
+
+            objId_ = s;
+            break;
+          }
+          case 40: {
 
             time_ = input.readInt64();
             break;
@@ -180,27 +189,98 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int OBJID_FIELD_NUMBER = 3;
-  private int objId_;
+  public static final int UID_FIELD_NUMBER = 3;
+  private volatile java.lang.Object uid_;
   /**
    * <pre>
-   *目标id
+   *发送请求用户id
    * </pre>
    *
-   * <code>int32 objId = 3;</code>
+   * <code>string uid = 3;</code>
    */
-  public int getObjId() {
-    return objId_;
+  public java.lang.String getUid() {
+    java.lang.Object ref = uid_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      uid_ = s;
+      return s;
+    }
+  }
+  /**
+   * <pre>
+   *发送请求用户id
+   * </pre>
+   *
+   * <code>string uid = 3;</code>
+   */
+  public com.google.protobuf.ByteString
+      getUidBytes() {
+    java.lang.Object ref = uid_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      uid_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
   }
 
-  public static final int TIME_FIELD_NUMBER = 4;
+  public static final int OBJID_FIELD_NUMBER = 4;
+  private volatile java.lang.Object objId_;
+  /**
+   * <pre>
+   *发送目标id
+   * </pre>
+   *
+   * <code>string objId = 4;</code>
+   */
+  public java.lang.String getObjId() {
+    java.lang.Object ref = objId_;
+    if (ref instanceof java.lang.String) {
+      return (java.lang.String) ref;
+    } else {
+      com.google.protobuf.ByteString bs = 
+          (com.google.protobuf.ByteString) ref;
+      java.lang.String s = bs.toStringUtf8();
+      objId_ = s;
+      return s;
+    }
+  }
+  /**
+   * <pre>
+   *发送目标id
+   * </pre>
+   *
+   * <code>string objId = 4;</code>
+   */
+  public com.google.protobuf.ByteString
+      getObjIdBytes() {
+    java.lang.Object ref = objId_;
+    if (ref instanceof java.lang.String) {
+      com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString.copyFromUtf8(
+              (java.lang.String) ref);
+      objId_ = b;
+      return b;
+    } else {
+      return (com.google.protobuf.ByteString) ref;
+    }
+  }
+
+  public static final int TIME_FIELD_NUMBER = 5;
   private long time_;
   /**
    * <pre>
    *消息发送时间
    * </pre>
    *
-   * <code>int64 time = 4;</code>
+   * <code>int64 time = 5;</code>
    */
   public long getTime() {
     return time_;
@@ -226,11 +306,14 @@ private static final long serialVersionUID = 0L;
     if (!getReqMsgBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 2, reqMsg_);
     }
-    if (objId_ != 0) {
-      output.writeInt32(3, objId_);
+    if (!getUidBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, uid_);
+    }
+    if (!getObjIdBytes().isEmpty()) {
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, objId_);
     }
     if (time_ != 0L) {
-      output.writeInt64(4, time_);
+      output.writeInt64(5, time_);
     }
     unknownFields.writeTo(output);
   }
@@ -247,13 +330,15 @@ private static final long serialVersionUID = 0L;
     if (!getReqMsgBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, reqMsg_);
     }
-    if (objId_ != 0) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(3, objId_);
+    if (!getUidBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, uid_);
+    }
+    if (!getObjIdBytes().isEmpty()) {
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, objId_);
     }
     if (time_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(4, time_);
+        .computeInt64Size(5, time_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -274,8 +359,10 @@ private static final long serialVersionUID = 0L;
         .equals(other.getCmdId())) return false;
     if (!getReqMsg()
         .equals(other.getReqMsg())) return false;
-    if (getObjId()
-        != other.getObjId()) return false;
+    if (!getUid()
+        .equals(other.getUid())) return false;
+    if (!getObjId()
+        .equals(other.getObjId())) return false;
     if (getTime()
         != other.getTime()) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
@@ -293,8 +380,10 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + getCmdId().hashCode();
     hash = (37 * hash) + REQMSG_FIELD_NUMBER;
     hash = (53 * hash) + getReqMsg().hashCode();
+    hash = (37 * hash) + UID_FIELD_NUMBER;
+    hash = (53 * hash) + getUid().hashCode();
     hash = (37 * hash) + OBJID_FIELD_NUMBER;
-    hash = (53 * hash) + getObjId();
+    hash = (53 * hash) + getObjId().hashCode();
     hash = (37 * hash) + TIME_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getTime());
@@ -435,7 +524,9 @@ private static final long serialVersionUID = 0L;
 
       reqMsg_ = "";
 
-      objId_ = 0;
+      uid_ = "";
+
+      objId_ = "";
 
       time_ = 0L;
 
@@ -467,6 +558,7 @@ private static final long serialVersionUID = 0L;
       com.fireflyi.gerant.rpclient.protobuf.Greq result = new com.fireflyi.gerant.rpclient.protobuf.Greq(this);
       result.cmdId_ = cmdId_;
       result.reqMsg_ = reqMsg_;
+      result.uid_ = uid_;
       result.objId_ = objId_;
       result.time_ = time_;
       onBuilt();
@@ -525,8 +617,13 @@ private static final long serialVersionUID = 0L;
         reqMsg_ = other.reqMsg_;
         onChanged();
       }
-      if (other.getObjId() != 0) {
-        setObjId(other.getObjId());
+      if (!other.getUid().isEmpty()) {
+        uid_ = other.uid_;
+        onChanged();
+      }
+      if (!other.getObjId().isEmpty()) {
+        objId_ = other.objId_;
+        onChanged();
       }
       if (other.getTime() != 0L) {
         setTime(other.getTime());
@@ -718,40 +815,180 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private int objId_ ;
+    private java.lang.Object uid_ = "";
     /**
      * <pre>
-     *目标id
+     *发送请求用户id
      * </pre>
      *
-     * <code>int32 objId = 3;</code>
+     * <code>string uid = 3;</code>
      */
-    public int getObjId() {
-      return objId_;
+    public java.lang.String getUid() {
+      java.lang.Object ref = uid_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        uid_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
     }
     /**
      * <pre>
-     *目标id
+     *发送请求用户id
      * </pre>
      *
-     * <code>int32 objId = 3;</code>
+     * <code>string uid = 3;</code>
      */
-    public Builder setObjId(int value) {
+    public com.google.protobuf.ByteString
+        getUidBytes() {
+      java.lang.Object ref = uid_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        uid_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <pre>
+     *发送请求用户id
+     * </pre>
+     *
+     * <code>string uid = 3;</code>
+     */
+    public Builder setUid(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
+      uid_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     *发送请求用户id
+     * </pre>
+     *
+     * <code>string uid = 3;</code>
+     */
+    public Builder clearUid() {
       
+      uid_ = getDefaultInstance().getUid();
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     *发送请求用户id
+     * </pre>
+     *
+     * <code>string uid = 3;</code>
+     */
+    public Builder setUidBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      uid_ = value;
+      onChanged();
+      return this;
+    }
+
+    private java.lang.Object objId_ = "";
+    /**
+     * <pre>
+     *发送目标id
+     * </pre>
+     *
+     * <code>string objId = 4;</code>
+     */
+    public java.lang.String getObjId() {
+      java.lang.Object ref = objId_;
+      if (!(ref instanceof java.lang.String)) {
+        com.google.protobuf.ByteString bs =
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        objId_ = s;
+        return s;
+      } else {
+        return (java.lang.String) ref;
+      }
+    }
+    /**
+     * <pre>
+     *发送目标id
+     * </pre>
+     *
+     * <code>string objId = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getObjIdBytes() {
+      java.lang.Object ref = objId_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        objId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    /**
+     * <pre>
+     *发送目标id
+     * </pre>
+     *
+     * <code>string objId = 4;</code>
+     */
+    public Builder setObjId(
+        java.lang.String value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  
       objId_ = value;
       onChanged();
       return this;
     }
     /**
      * <pre>
-     *目标id
+     *发送目标id
      * </pre>
      *
-     * <code>int32 objId = 3;</code>
+     * <code>string objId = 4;</code>
      */
     public Builder clearObjId() {
       
-      objId_ = 0;
+      objId_ = getDefaultInstance().getObjId();
+      onChanged();
+      return this;
+    }
+    /**
+     * <pre>
+     *发送目标id
+     * </pre>
+     *
+     * <code>string objId = 4;</code>
+     */
+    public Builder setObjIdBytes(
+        com.google.protobuf.ByteString value) {
+      if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+      
+      objId_ = value;
       onChanged();
       return this;
     }
@@ -762,7 +999,7 @@ private static final long serialVersionUID = 0L;
      *消息发送时间
      * </pre>
      *
-     * <code>int64 time = 4;</code>
+     * <code>int64 time = 5;</code>
      */
     public long getTime() {
       return time_;
@@ -772,7 +1009,7 @@ private static final long serialVersionUID = 0L;
      *消息发送时间
      * </pre>
      *
-     * <code>int64 time = 4;</code>
+     * <code>int64 time = 5;</code>
      */
     public Builder setTime(long value) {
       
@@ -785,7 +1022,7 @@ private static final long serialVersionUID = 0L;
      *消息发送时间
      * </pre>
      *
-     * <code>int64 time = 4;</code>
+     * <code>int64 time = 5;</code>
      */
     public Builder clearTime() {
       

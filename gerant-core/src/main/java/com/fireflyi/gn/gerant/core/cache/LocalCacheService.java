@@ -11,4 +11,6 @@ public interface LocalCacheService<T> {
     public Boolean set(T var1, T var2);
 
     public T get(T var);
+
+    public Boolean del(T var);
 }

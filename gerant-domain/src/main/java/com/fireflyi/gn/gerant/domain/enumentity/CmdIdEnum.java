@@ -8,6 +8,9 @@ package com.fireflyi.gn.gerant.domain.enumentity;
  */
 public enum CmdIdEnum {
 
+    /**
+     *
+     */
     USER_TO_USER("USER_TO_USER","用户之间消息"),
 
     EY_IM_MSG_1099("1099","获取所有的好友列表信息");

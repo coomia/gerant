@@ -2,7 +2,6 @@ package com.fireflyi.gerant.mcenter;
 
 import com.fireflyi.gerant.mcenter.service.McenterApiServiceImpl;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import org.slf4j.Logger;

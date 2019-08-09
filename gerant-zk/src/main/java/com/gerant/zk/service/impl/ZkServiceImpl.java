@@ -1,7 +1,7 @@
 package com.gerant.zk.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.fireflyi.gn.gerant.domain.ServerNodeInfo;
+import com.fireflyi.gerant.rpclient.route.vo.ServerNodeInfoVo;
 import com.gerant.zk.service.ZkService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author by fireflyi (6025606@qq.com)
@@ -88,14 +89,26 @@ public class ZkServiceImpl implements ZkService {
     }
 
     @Override
-    public ServerNodeInfo getOneServer() {
-        return null;
+    public ServerNodeInfoVo getOneServer() {
+        List<String> cs = getAll();
+
+        Random random = new Random();
+        int n = random.nextInt(cs.size());
+        String var1 = cs.get(n);
+
+        String[] arr = var1.split(":");
+
+        ServerNodeInfoVo.Builder vobu = ServerNodeInfoVo.newBuilder();
+        vobu.setIp(arr[0]);
+        vobu.setPort(Integer.parseInt(arr[1]));
+        ServerNodeInfoVo jsonSnv = vobu.build();
+
+        return jsonSnv;
     }
 
     @Override
-    public List<ServerNodeInfo> getAll() {
+    public List<String> getAll() {
         List<String> cs = zkc.getChildren(rootNode);
-        logger.info(JSON.toJSONString(cs));
-        return null;
+        return cs;
     }
 }

@@ -37,19 +37,46 @@ public interface GreqOrBuilder extends
 
   /**
    * <pre>
-   *目标id
+   *发送请求用户id
    * </pre>
    *
-   * <code>int32 objId = 3;</code>
+   * <code>string uid = 3;</code>
    */
-  int getObjId();
+  java.lang.String getUid();
+  /**
+   * <pre>
+   *发送请求用户id
+   * </pre>
+   *
+   * <code>string uid = 3;</code>
+   */
+  com.google.protobuf.ByteString
+      getUidBytes();
+
+  /**
+   * <pre>
+   *发送目标id
+   * </pre>
+   *
+   * <code>string objId = 4;</code>
+   */
+  java.lang.String getObjId();
+  /**
+   * <pre>
+   *发送目标id
+   * </pre>
+   *
+   * <code>string objId = 4;</code>
+   */
+  com.google.protobuf.ByteString
+      getObjIdBytes();
 
   /**
    * <pre>
    *消息发送时间
    * </pre>
    *
-   * <code>int64 time = 4;</code>
+   * <code>int64 time = 5;</code>
    */
   long getTime();
 }

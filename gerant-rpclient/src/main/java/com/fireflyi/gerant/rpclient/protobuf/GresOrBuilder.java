@@ -26,11 +26,29 @@ public interface GresOrBuilder extends
   int getCode();
 
   /**
-   * <code>string resMsg = 3;</code>
+   * <pre>
+   *返回数据
+   * </pre>
+   *
+   * <code>string data = 3;</code>
+   */
+  java.lang.String getData();
+  /**
+   * <pre>
+   *返回数据
+   * </pre>
+   *
+   * <code>string data = 3;</code>
+   */
+  com.google.protobuf.ByteString
+      getDataBytes();
+
+  /**
+   * <code>string resMsg = 4;</code>
    */
   java.lang.String getResMsg();
   /**
-   * <code>string resMsg = 3;</code>
+   * <code>string resMsg = 4;</code>
    */
   com.google.protobuf.ByteString
       getResMsgBytes();

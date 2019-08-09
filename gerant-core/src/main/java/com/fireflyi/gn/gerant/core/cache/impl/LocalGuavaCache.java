@@ -27,7 +27,7 @@ public class LocalGuavaCache implements LocalCacheService<String> {
     public LocalGuavaCache(){
         localCache = CacheBuilder.newBuilder()
                         .maximumSize(5000)
-                        .expireAfterWrite(-1L, TimeUnit.MINUTES) // 设置缓存永不失效
+                        //.expireAfterWrite(0L, TimeUnit.MINUTES) // 设置缓存永不失效
                         .concurrencyLevel(10) // 设置并发级别为10
                         .recordStats() // 开启缓存统计
                         .build();
@@ -46,7 +46,7 @@ public class LocalGuavaCache implements LocalCacheService<String> {
             return localCache.get(key, new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    return null;
+                    return "0";
                 }
             });
         } catch (ExecutionException e) {
@@ -54,5 +54,11 @@ public class LocalGuavaCache implements LocalCacheService<String> {
             log.error("e->{}",e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public Boolean del(String key){
+        localCache.invalidate(key);
+        return true;
     }
 }

@@ -1,6 +1,9 @@
-package client;
+package app;
 
 import com.fireflyi.gerant.rpclient.McenterApiServiceGrpc;
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
+import com.fireflyi.gerant.rpclient.protobuf.Gres;
+import com.fireflyi.gerant.rpclient.route.UcenterServiceGrpc;
 import com.fireflyi.gn.gerant.domain.enumentity.CmdIdEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -16,13 +19,15 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/7/26
  * DESC TODO
  */
-public class McenterLaunchesClient {
-    private Logger logger= LoggerFactory.getLogger(McenterLaunchesClient.class);
+public class RouteLaunchesClient {
+    private Logger logger= LoggerFactory.getLogger(RouteLaunchesClient.class);
     private final ManagedChannel channel;
     private final McenterApiServiceGrpc.McenterApiServiceBlockingStub blockingStub;
+    //路由服务客户端测试类
+    private final UcenterServiceGrpc.UcenterServiceBlockingStub ucenterStub;
 
     /** Construct client connecting to HelloWorld server at {@code host:port}. */
-    public McenterLaunchesClient(String host, int port) {
+    public RouteLaunchesClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
                 // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
                 // needing certificates.
@@ -30,39 +35,8 @@ public class McenterLaunchesClient {
                 .build());
     }
 
-    /** Construct client for accessing HelloWorld server using the existing channel. */
-    McenterLaunchesClient(ManagedChannel channel) {
-        this.channel = channel;
-        blockingStub = McenterApiServiceGrpc.newBlockingStub(channel);
-    }
-
-    public void shutdown() throws InterruptedException {
-        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-    }
-
-    /** Say hello to server. */
-    public void greet(String name) {
-        Greq.Builder req = Greq.newBuilder();
-        req.setCmdId(CmdIdEnum.USER_TO_USER.cmdId);
-        req.setReqMsg("ss");
-        Greq request = req.build();
-
-        Gres response;
-        try {
-            response = blockingStub.mcPipline(request);
-        } catch (StatusRuntimeException e) {
-            return;
-        }
-        logger.info("收到服务端信息返回: " + response.getResMsg());
-
-    }
-
-    /**
-     * Greet server. If provided, the first element of {@code args} is the name to use in the
-     * greeting.
-     */
     public static void main(String[] args) throws Exception {
-        McenterLaunchesClient client = new McenterLaunchesClient("localhost", 50051);
+        RouteLaunchesClient client = new RouteLaunchesClient("localhost", 9001);
         try {
             /* Access a service running on the local machine on port 50051 */
             String user = "来自客户端的信息->222222222";
@@ -70,13 +44,41 @@ public class McenterLaunchesClient {
                 user = args[0]; /* Use the arg as the name to greet if provided */
             }
             long a = System.currentTimeMillis();
-            for(int i=0;i<1000;i++) {
+            for(int i=0;i<1;i++) {
                 client.greet(user);
             }
             long b = System.currentTimeMillis();
-            System.out.printf(b-a+"");
         } finally {
             client.shutdown();
         }
     }
+
+    public void greet(String name) {
+        Greq.Builder req = Greq.newBuilder();
+        req.setUid("123456");
+        Greq request = req.build();
+
+        Gres response;
+        try {
+            //response = ucenterStub.register(request);
+            response = ucenterStub.getUsers(request);
+            //response = ucenterStub.outLine(request);
+        } catch (StatusRuntimeException e) {
+            return;
+        }
+        logger.info("服务端信息返回->{}", response.toString());
+
+    }
+
+    RouteLaunchesClient(ManagedChannel channel) {
+        this.channel = channel;
+        blockingStub = McenterApiServiceGrpc.newBlockingStub(channel);
+        ucenterStub = UcenterServiceGrpc.newBlockingStub(channel);
+    }
+
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+
 }

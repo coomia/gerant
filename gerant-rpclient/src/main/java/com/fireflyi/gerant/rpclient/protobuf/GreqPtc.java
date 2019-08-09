@@ -28,10 +28,11 @@ public final class GreqPtc {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\rGreqptc.proto\022\010protocol\"B\n\004Greq\022\r\n\005cmd" +
-      "Id\030\001 \001(\t\022\016\n\006reqMsg\030\002 \001(\t\022\r\n\005objId\030\003 \001(\005\022" +
-      "\014\n\004time\030\004 \001(\003B2\n%com.fireflyi.gerant.rpc" +
-      "lient.protobufB\007GreqPtcP\001b\006proto3"
+      "\n\rGreqptc.proto\022\010protocol\"O\n\004Greq\022\r\n\005cmd" +
+      "Id\030\001 \001(\t\022\016\n\006reqMsg\030\002 \001(\t\022\013\n\003uid\030\003 \001(\t\022\r\n" +
+      "\005objId\030\004 \001(\t\022\014\n\004time\030\005 \001(\003B2\n%com.firefl" +
+      "yi.gerant.rpclient.protobufB\007GreqPtcP\001b\006" +
+      "proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -42,7 +43,7 @@ public final class GreqPtc {
     internal_static_protocol_Greq_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_protocol_Greq_descriptor,
-        new java.lang.String[] { "CmdId", "ReqMsg", "ObjId", "Time", });
+        new java.lang.String[] { "CmdId", "ReqMsg", "Uid", "ObjId", "Time", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

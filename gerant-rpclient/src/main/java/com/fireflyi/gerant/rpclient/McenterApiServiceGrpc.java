@@ -19,7 +19,7 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
  */
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.23.0-SNAPSHOT)",
-    comments = "Source: McenterApiService.proto")
+    comments = "Source: UcenterService.proto")
 public final class McenterApiServiceGrpc {
 
   private McenterApiServiceGrpc() {}

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package protobuf.route;
+//protoc --java_out=./ ServerNodeInfoVo.proto
+option java_package = "com.fireflyi.gerant.rpclient.route.vo";
+option java_outer_classname = "ServerNodeInfoPtc";
+option java_multiple_files = true;
+
+message ServerNodeInfoVo {
+    string ip = 1; //ip
+    int32 port = 2;
+    string name = 3; //名字
+    string group = 4;//组名
+}

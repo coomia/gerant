@@ -1,0 +1,27 @@
+syntax = "proto3";
+package protocol.route;
+
+import "Greqptc.proto";
+import "Gresptc.proto";
+
+
+//cd ../
+//protoc --plugin=protoc-gen-grpc-java=/Users/lishihao/Desktop/github/grpc-java-master/compiler/build/exe/java_plugin/protoc-gen-grpc-java --grpc-java_out=./ --proto_path=./ UcenterService.proto
+
+//proto_path解决导入其他包问题
+//protoc --proto_path="./route/" --proto_path="./"   --java_out=./ UcenterService.proto
+
+//2个命令都要执行来生成2个java文件
+option java_multiple_files = true;
+option java_package = "com.fireflyi.gerant.rpclient.route";
+option java_outer_classname = "UcenterServicePtc";
+
+service UcenterService {
+  rpc register (protocol.Greq) returns (protocol.Gres){} ;
+
+  rpc outLine (protocol.Greq) returns (protocol.Gres){};
+
+  rpc getUsers (protocol.Greq) returns (protocol.Gres){};
+
+}
+

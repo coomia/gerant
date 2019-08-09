@@ -1,6 +1,7 @@
-package com.fireflyi.gn.gerant.service.core;
+package com.fireflyi.gn.gerant.service;
 
 import com.fireflyi.gn.gerant.core.cache.RedisClient;
+import com.fireflyi.gn.gerant.service.core.GerantServerInitializer;
 import com.gerant.zk.ServerRegistryZK;
 import com.gerant.zk.ZkApplication;
 import com.google.inject.Inject;
@@ -17,7 +18,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  * @date 2019/7/20
  * DESC TODO
  */
-public class GerantSocketServer {
+public class GerantSocketApplication {
 
     @Inject
     ServerRegistryZK serverRegistryZK;

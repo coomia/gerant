@@ -1,6 +1,8 @@
 package com.fireflyi.gerant.route;
 
+import com.fireflyi.gerant.route.ucenter.service.impl.UcenterServiceImpl;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import org.slf4j.Logger;
@@ -17,16 +19,19 @@ import java.io.IOException;
 public class RouteApplication {
     private static final Logger logger = LoggerFactory.getLogger(RouteApplication.class);
 
+    @Inject
+    @Named("route.server.prot")
+    private Integer port;
+
     private Server server;
 
-    //@Inject
-    //private McenterApiServiceImpl mcenterApiService;
+    @Inject
+    private UcenterServiceImpl ucenterService;
 
     @Inject
     private void start() throws IOException, InterruptedException {
-        int port = 50051;
         server = ServerBuilder.forPort(port)
-                //.addService(mcenterApiService)
+                .addService(ucenterService)
                 .build()
                 .start();
         logger.info("Server started, listening on " + port);

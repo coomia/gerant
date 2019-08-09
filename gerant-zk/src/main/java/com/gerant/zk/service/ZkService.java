@@ -1,6 +1,6 @@
 package com.gerant.zk.service;
 
-import com.fireflyi.gn.gerant.domain.ServerNodeInfo;
+import com.fireflyi.gerant.rpclient.route.vo.ServerNodeInfoVo;
 import com.gerant.zk.service.impl.ZkServiceImpl;
 import com.google.inject.ImplementedBy;
 
@@ -42,13 +42,13 @@ public interface ZkService {
      * 获取一个服务节点
      * @return
      */
-    ServerNodeInfo getOneServer();
+    ServerNodeInfoVo getOneServer();
 
     /**
      * 获取所有节点
      * @return
      */
-    List<ServerNodeInfo> getAll();
+    List<String> getAll();
 
 
 
