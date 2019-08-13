@@ -1,5 +1,7 @@
 package com.fireflyi.gerant.mcenter.core;
 
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
+
 import static java.lang.Thread.sleep;
 
 /**

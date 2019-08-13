@@ -1,6 +1,8 @@
 package client;
 
 import com.fireflyi.gerant.rpclient.McenterApiServiceGrpc;
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
+import com.fireflyi.gerant.rpclient.protobuf.Gres;
 import com.fireflyi.gn.gerant.domain.enumentity.CmdIdEnum;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -43,7 +45,7 @@ public class McenterLaunchesClient {
     /** Say hello to server. */
     public void greet(String name) {
         Greq.Builder req = Greq.newBuilder();
-        req.setCmdId(CmdIdEnum.USER_TO_USER.cmdId);
+        req.setCmdId(CmdIdEnum.ADMIN_TO_ALL.cmdId);
         req.setReqMsg("ss");
         Greq request = req.build();
 
@@ -70,7 +72,7 @@ public class McenterLaunchesClient {
                 user = args[0]; /* Use the arg as the name to greet if provided */
             }
             long a = System.currentTimeMillis();
-            for(int i=0;i<1000;i++) {
+            for(int i=0;i<1;i++) {
                 client.greet(user);
             }
             long b = System.currentTimeMillis();

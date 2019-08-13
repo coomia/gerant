@@ -1,8 +1,11 @@
 package com.fireflyi.gerant.mcenter.service;
 
 import com.fireflyi.gerant.mcenter.core.McenterHandlerAdapter;
+import com.fireflyi.gerant.mcenter.core.impl.AdminToAll;
 import com.fireflyi.gerant.mcenter.core.impl.UsertuService;
 import com.fireflyi.gerant.rpclient.McenterApiServiceGrpc;
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
+import com.fireflyi.gerant.rpclient.protobuf.Gres;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.grpc.stub.StreamObserver;
@@ -32,8 +35,12 @@ public class McenterApiServiceImpl  extends McenterApiServiceGrpc.McenterApiServ
     UsertuService usertuService;
 
     @Inject
+    AdminToAll adminToAll;
+
+    @Inject
     public void setHandlers(){
         handlers.add(usertuService);
+        handlers.add(adminToAll);
     }
 
     @Override

@@ -13,7 +13,7 @@ public enum CmdIdEnum {
      */
     USER_TO_USER("USER_TO_USER","用户之间消息"),
 
-    EY_IM_MSG_1099("1099","获取所有的好友列表信息");
+    ADMIN_TO_ALL("ADMIN_TO_ALL","管理员发送全员消息");
 
     public String cmdId; //消息类型
     public String desc; //描述

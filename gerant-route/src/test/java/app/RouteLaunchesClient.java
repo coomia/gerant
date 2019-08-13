@@ -60,6 +60,7 @@ public class RouteLaunchesClient {
 
         Gres response;
         try {
+            //用户长连接注册
             //response = ucenterStub.register(request);
             response = ucenterStub.getUsers(request);
             //response = ucenterStub.outLine(request);
