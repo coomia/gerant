@@ -10,7 +10,7 @@ import com.google.inject.ImplementedBy;
  * @date 2019/8/12
  * DESC 消息发送给route接口
  */
-@ImplementedBy(SendToRedis.class)
+@ImplementedBy(SendToRocketmq.class)
 public interface SendToRoute<T> {
 
     /**

@@ -23,46 +23,6 @@ public class McenterLaunchesClient {
     private final ManagedChannel channel;
     private final McenterApiServiceGrpc.McenterApiServiceBlockingStub blockingStub;
 
-    /** Construct client connecting to HelloWorld server at {@code host:port}. */
-    public McenterLaunchesClient(String host, int port) {
-        this(ManagedChannelBuilder.forAddress(host, port)
-                // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
-                // needing certificates.
-                .usePlaintext()
-                .build());
-    }
-
-    /** Construct client for accessing HelloWorld server using the existing channel. */
-    McenterLaunchesClient(ManagedChannel channel) {
-        this.channel = channel;
-        blockingStub = McenterApiServiceGrpc.newBlockingStub(channel);
-    }
-
-    public void shutdown() throws InterruptedException {
-        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
-    }
-
-    /** Say hello to server. */
-    public void greet(String name) {
-        Greq.Builder req = Greq.newBuilder();
-        req.setCmdId(CmdIdEnum.ADMIN_TO_ALL.cmdId);
-        req.setReqMsg("ss");
-        Greq request = req.build();
-
-        Gres response;
-        try {
-            response = blockingStub.mcPipline(request);
-        } catch (StatusRuntimeException e) {
-            return;
-        }
-        logger.info("收到服务端信息返回: " + response.getResMsg());
-
-    }
-
-    /**
-     * Greet server. If provided, the first element of {@code args} is the name to use in the
-     * greeting.
-     */
     public static void main(String[] args) throws Exception {
         McenterLaunchesClient client = new McenterLaunchesClient("localhost", 50051);
         try {
@@ -80,5 +40,38 @@ public class McenterLaunchesClient {
         } finally {
             client.shutdown();
         }
+    }
+
+    public void greet(String name) {
+        Greq.Builder req = Greq.newBuilder();
+        req.setCmdId(CmdIdEnum.ADMIN_TO_ALL.cmdId);
+        req.setReqMsg("推送消息哈哈哈啊");
+        Greq request = req.build();
+
+        Gres response;
+        try {
+            response = blockingStub.mcPipline(request);
+        } catch (StatusRuntimeException e) {
+            return;
+        }
+        logger.info("收到服务端信息返回: " + response.getResMsg());
+
+    }
+
+    public McenterLaunchesClient(String host, int port) {
+        this(ManagedChannelBuilder.forAddress(host, port)
+                // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
+                // needing certificates.
+                .usePlaintext()
+                .build());
+    }
+
+    McenterLaunchesClient(ManagedChannel channel) {
+        this.channel = channel;
+        blockingStub = McenterApiServiceGrpc.newBlockingStub(channel);
+    }
+
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 }

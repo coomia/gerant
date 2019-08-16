@@ -1,6 +1,8 @@
 package com.fireflyi.gerant.mcenter.core;
 
 import com.fireflyi.gerant.rpclient.protobuf.Greq;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.lang.Thread.sleep;
 
@@ -12,7 +14,7 @@ import static java.lang.Thread.sleep;
  */
 public abstract class McenterHandlerAdapter implements McHandler {
 
-    String cmdId;
+    protected String cmdId;
 
     @Override
     public abstract void doHandler(Greq var1);
