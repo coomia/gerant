@@ -24,6 +24,7 @@ public class RouteLaunches {
         final String file = "route.properties";
         final String cacheFile = "config/cache.properties";
         final String guice = "config/guice.properties";
+        final String mq = "config/mq.properties";
 
         Injector injector = Guice.createInjector(new Module() {
             @Override
@@ -31,6 +32,7 @@ public class RouteLaunches {
                 Names.bindProperties(binder, PropertyUtil.loadFile(file, getClass()));
                 Names.bindProperties(binder, PropertyUtil.loadFile(guice, getClass()));
                 Names.bindProperties(binder, PropertyUtil.loadFile(cacheFile, getClass()));
+                Names.bindProperties(binder, PropertyUtil.loadFile(mq, getClass()));
                 binder.bindInterceptor(Matchers.any(), Matchers.annotatedWith(Gnamed.class), new GerantMethodInterceptor());
             }
         });

@@ -1,5 +1,6 @@
 package com.fireflyi.gerant.route;
 
+import com.fireflyi.gerant.route.threads.RouteMsgThreadsPool;
 import com.fireflyi.gerant.route.ucenter.service.impl.UcenterServiceImpl;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -26,7 +27,10 @@ public class RouteApplication {
     private Server server;
 
     @Inject
-    private UcenterServiceImpl ucenterService;
+    private UcenterServiceImpl ucenterService;//用户登录注册服务
+
+    @Inject
+    private RouteMsgThreadsPool routeMsgThreadsPool;//线程池服务
 
     @Inject
     private void start() throws IOException, InterruptedException {

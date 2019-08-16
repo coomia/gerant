@@ -34,8 +34,8 @@ public class McenterMqProducer extends AbstractMqProducer {
     @Override
     public void start() throws MQClientException {
         producer.setNamesrvAddr(host+":"+port);
-        producer.setInstanceName("mcenter_rocketmq-instance");
-        producer.setProducerGroup("mcenter_rocketmq_producer");
+        producer.setInstanceName("mcenter_instance_default");
+        producer.setProducerGroup("mcenter_group__default");
         producer.setRetryAnotherBrokerWhenNotStoreOK(true);
         producer.setRetryTimesWhenSendAsyncFailed(5);
         producer.setRetryTimesWhenSendFailed(5);

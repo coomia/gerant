@@ -32,7 +32,7 @@ public class McenterLaunchesClient {
                 user = args[0]; /* Use the arg as the name to greet if provided */
             }
             long a = System.currentTimeMillis();
-            for(int i=0;i<1;i++) {
+            for(int i=0;i<100;i++) {
                 client.greet(user);
             }
             long b = System.currentTimeMillis();
