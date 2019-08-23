@@ -26,14 +26,9 @@ public class McenterLaunchesClient {
     public static void main(String[] args) throws Exception {
         McenterLaunchesClient client = new McenterLaunchesClient("localhost", 50051);
         try {
-            /* Access a service running on the local machine on port 50051 */
-            String user = "来自客户端的信息->222222222";
-            if (args.length > 0) {
-                user = args[0]; /* Use the arg as the name to greet if provided */
-            }
             long a = System.currentTimeMillis();
-            for(int i=0;i<100;i++) {
-                client.greet(user);
+            for(int i=0;i<10;i++) {
+                client.greet(i);
             }
             long b = System.currentTimeMillis();
             System.out.printf(b-a+"");
@@ -42,10 +37,10 @@ public class McenterLaunchesClient {
         }
     }
 
-    public void greet(String name) {
+    public void greet(Integer name) {
         Greq.Builder req = Greq.newBuilder();
         req.setCmdId(CmdIdEnum.ADMIN_TO_ALL.cmdId);
-        req.setReqMsg("推送消息哈哈哈啊");
+        req.setReqMsg("推送消息哈哈哈啊"+name);
         Greq request = req.build();
 
         Gres response;

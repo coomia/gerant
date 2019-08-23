@@ -13,6 +13,8 @@ public enum CmdIdEnum {
      */
     USER_TO_USER("USER_TO_USER","用户之间消息"),
 
+    USER_REGISTE("USER_REGISTE","用户注册，获取节点信息"),
+
     ADMIN_TO_ALL("ADMIN_TO_ALL","管理员发送全员消息");
 
     public String cmdId; //消息类型

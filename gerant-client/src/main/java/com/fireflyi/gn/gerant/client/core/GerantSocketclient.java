@@ -1,9 +1,12 @@
 package com.fireflyi.gn.gerant.client.core;
 
+import com.fireflyi.gn.gerant.client.demo.UScanner;
 import com.fireflyi.gn.gerant.client.handler.ClientIdleStateHandler;
 import com.fireflyi.gn.gerant.core.GerantServerInfoService;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -23,10 +26,24 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/7/20
  * DESC TODO
  */
+@Singleton
 public class GerantSocketclient {
+
+    private ChannelFuture future;
+
+    @Inject
+    private UScanner uScanner;
 
     @Inject
     private GerantServerInfoService gerantServerInfoService;
+
+    @Inject
+    @Named("base.server.port")
+    private Integer PORT;
+
+    public ChannelFuture getFuture() {
+        return future;
+    }
 
     @Inject
     public void connect(){
@@ -52,7 +69,7 @@ public class GerantSocketclient {
             });
 
             //连接服务器
-            ChannelFuture future = client.connect(gerantServerInfoService.getServerInfo().getIp(), 6288).sync();
+            future = client.connect(gerantServerInfoService.getServerInfo().getIp(), PORT).sync();
             if(future.isSuccess()){
                 System.out.println("客户端链接成功");
             }else{

@@ -1,6 +1,5 @@
 package com.fireflyi.gn.gerant.client;
 
-import com.fireflyi.gn.gerant.client.core.GerantSocketclient;
 import com.fireflyi.gn.gerant.core.annotation.Gnamed;
 import com.fireflyi.gn.gerant.core.aop.GerantMethodInterceptor;
 import com.fireflyi.gn.gerant.common.util.PropertyUtil;
@@ -14,10 +13,10 @@ import com.google.inject.name.Names;
  * @date 2019/7/24
  * DESC TODO
  */
-public class Client {
+public class DemoLaunches {
 
     @Inject
-    GerantSocketclient gerantSocketclient;
+    DemoApplication demoApplication;
 
     public static void main(String[] a){
 
@@ -32,6 +31,6 @@ public class Client {
                 binder.bindInterceptor(Matchers.any(), Matchers.annotatedWith(Gnamed.class), new GerantMethodInterceptor());
             }
         });
-        GerantSocketclient gcc = injector.getInstance(Client.class).gerantSocketclient;
+        DemoApplication gcc = injector.getInstance(DemoLaunches.class).demoApplication;
     }
 }
