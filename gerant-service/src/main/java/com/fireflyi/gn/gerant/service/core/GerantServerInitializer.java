@@ -1,5 +1,6 @@
 package com.fireflyi.gn.gerant.service.core;
 
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.service.handler.GerantServerHandle;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.fireflyi.gn.gerant.service.handler.ServerIdleStateHandler;
@@ -25,7 +26,7 @@ public class GerantServerInitializer extends ChannelInitializer<Channel> {
     protected void initChannel(Channel channel) throws Exception {
         channel.pipeline()
                 .addLast(new ProtobufVarint32FrameDecoder())
-                .addLast(new ProtobufDecoder(GerantReqProtobuf.GerantReqProtocol.getDefaultInstance()))
+                .addLast(new ProtobufDecoder(Greq.getDefaultInstance()))
                 .addLast(new ProtobufVarint32LengthFieldPrepender())
                 .addLast(new ProtobufEncoder())
                 .addLast(new IdleStateHandler(30, 0, 0, TimeUnit.SECONDS))

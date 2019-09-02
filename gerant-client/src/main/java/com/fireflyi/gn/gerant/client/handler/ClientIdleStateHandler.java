@@ -1,5 +1,6 @@
 package com.fireflyi.gn.gerant.client.handler;
 
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.common.util.ProToBufBuild;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import io.netty.channel.ChannelFutureListener;
@@ -23,7 +24,7 @@ public class ClientIdleStateHandler extends ChannelInboundHandlerAdapter {
             IdleStateEvent idleStateEvent = (IdleStateEvent) evt ;
             //客户端心跳
             if (idleStateEvent.state() == IdleState.WRITER_IDLE){
-                GerantReqProtobuf.GerantReqProtocol.Builder heartBeat = ProToBufBuild.Pinger();
+                Greq.Builder heartBeat = ProToBufBuild.Pinger();
                 ctx.writeAndFlush(heartBeat).addListeners((ChannelFutureListener) future -> {
                     if (!future.isSuccess()) {
                         future.channel().close();

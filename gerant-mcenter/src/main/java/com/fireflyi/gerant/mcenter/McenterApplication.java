@@ -2,6 +2,7 @@ package com.fireflyi.gerant.mcenter;
 
 import com.fireflyi.gerant.mcenter.service.McenterApiServiceImpl;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import org.slf4j.Logger;
@@ -21,11 +22,14 @@ public class McenterApplication {
     private Server server;
 
     @Inject
+    @Named("mcenter.port")
+    private Integer port;
+
+    @Inject
     private McenterApiServiceImpl mcenterApiService;
 
     @Inject
     private void start() throws IOException, InterruptedException {
-        int port = 50051;
         server = ServerBuilder.forPort(port)
                 .addService(mcenterApiService)
                 .build()

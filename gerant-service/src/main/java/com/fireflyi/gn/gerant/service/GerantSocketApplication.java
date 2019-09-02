@@ -2,6 +2,7 @@ package com.fireflyi.gn.gerant.service;
 
 import com.fireflyi.gn.gerant.core.cache.RedisClient;
 import com.fireflyi.gn.gerant.service.core.GerantServerInitializer;
+import com.fireflyi.gn.gerant.service.core.McenterRpcClient;
 import com.gerant.zk.ServerRegistryZK;
 import com.gerant.zk.ZkApplication;
 import com.google.inject.Inject;

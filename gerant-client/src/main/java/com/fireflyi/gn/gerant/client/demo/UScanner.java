@@ -1,6 +1,7 @@
 package com.fireflyi.gn.gerant.client.demo;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.client.core.GerantSocketclient;
 import com.fireflyi.gn.gerant.common.util.ProToBufBuild;
 import com.fireflyi.gn.gerant.domain.entity.GreqEntity;
@@ -63,13 +64,13 @@ public class UScanner {
             return ;
         }
         ChannelFuture future = gerantSocketclient.getFuture();
-        GerantReqProtobuf.GerantReqProtocol.Builder builder = ProToBufBuild.ProToBufBuild();
-        builder.setType(GerantReqProtobuf.ChatType.CHAT_TYPE_PUBLIC);
+        Greq.Builder builder = ProToBufBuild.ProToBufBuild();
+        builder.setCmdId(CmdIdEnum.ADMIN_TO_ALL.cmdId);
         builder.setReqMsg("cliend,send protobuf消息");
-        for(int i=0;i<2;i++) {
+        for(int i=0;i<1;i++) {
             ChannelFuture futures = future.channel().writeAndFlush(builder.build());
             futures.addListener((ChannelFutureListener) channelFuture ->
-                    System.out.println("消息发送成功"));
+                    System.out.println("消息发送成功1"));
         }
 
     }

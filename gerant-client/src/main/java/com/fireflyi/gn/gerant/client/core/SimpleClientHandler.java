@@ -1,5 +1,6 @@
 package com.fireflyi.gn.gerant.client.core;
 
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.google.inject.Inject;
 import io.netty.channel.ChannelHandler;
@@ -13,13 +14,13 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * DESC TODO
  */
 @ChannelHandler.Sharable
-public class SimpleClientHandler extends SimpleChannelInboundHandler<GerantReqProtobuf.GerantReqProtocol> {
+public class SimpleClientHandler extends SimpleChannelInboundHandler<Greq> {
 
     @Inject
     private static GerantSocketclient gerantSocketclient;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, GerantReqProtobuf.GerantReqProtocol msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Greq msg) throws Exception {
         System.out.println(msg.toString());
     }
 

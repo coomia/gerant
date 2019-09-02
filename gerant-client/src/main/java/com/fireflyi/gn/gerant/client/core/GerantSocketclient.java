@@ -1,5 +1,6 @@
 package com.fireflyi.gn.gerant.client.core;
 
+import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.client.demo.UScanner;
 import com.fireflyi.gn.gerant.client.handler.ClientIdleStateHandler;
 import com.fireflyi.gn.gerant.core.GerantServerInfoService;
@@ -59,7 +60,7 @@ public class GerantSocketclient {
                     //Protobuf编解码器加在SimpleClientHandler的上面
                     ch.pipeline()
                             .addLast(new ProtobufVarint32FrameDecoder())
-                            .addLast(new ProtobufDecoder(GerantReqProtobuf.GerantReqProtocol.getDefaultInstance()))
+                            .addLast(new ProtobufDecoder(Greq.getDefaultInstance()))
                             .addLast(new ProtobufVarint32LengthFieldPrepender())
                             .addLast(new ProtobufEncoder())
                             .addLast(new IdleStateHandler(0, 15, 0, TimeUnit.SECONDS))
@@ -83,14 +84,14 @@ public class GerantSocketclient {
             }
 
             //发送数据
-            GerantReqProtobuf.GerantReqProtocol.Builder builder = GerantReqProtobuf.GerantReqProtocol.newBuilder();
-            builder.setType(GerantReqProtobuf.ChatType.CHAT_TYPE_PUBLIC);
-            builder.setReqMsg("cliend,send protobuf消息");
-            for(int i=0;i<2;i++) {
-                ChannelFuture futures = future.channel().writeAndFlush(builder.build());
-                futures.addListener((ChannelFutureListener) channelFuture ->
-                        System.out.println("客户端手动发消息成功"));
-            }
+//            GerantReqProtobuf.GerantReqProtocol.Builder builder = GerantReqProtobuf.GerantReqProtocol.newBuilder();
+//            builder.setType(GerantReqProtobuf.ChatType.CHAT_TYPE_PUBLIC);
+//            builder.setReqMsg("cliend,send protobuf消息");
+//            for(int i=0;i<2;i++) {
+//                ChannelFuture futures = future.channel().writeAndFlush(builder.build());
+//                futures.addListener((ChannelFutureListener) channelFuture ->
+//                        System.out.println("客户端手动发消息成功"));
+//            }
 
             //当通道关闭了，就继续往下走
             future.channel().closeFuture().sync();

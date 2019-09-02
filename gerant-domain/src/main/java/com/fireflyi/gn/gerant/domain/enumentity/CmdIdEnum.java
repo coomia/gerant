@@ -11,6 +11,8 @@ public enum CmdIdEnum {
     /**
      *
      */
+    PONG("PONG","PONG"),
+
     USER_TO_USER("USER_TO_USER","用户之间消息"),
 
     USER_REGISTE("USER_REGISTE","用户注册，获取节点信息"),
