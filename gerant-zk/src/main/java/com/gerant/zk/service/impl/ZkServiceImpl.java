@@ -2,6 +2,7 @@ package com.gerant.zk.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.fireflyi.gerant.rpclient.route.vo.ServerNodeInfoVo;
+import com.fireflyi.gn.gerant.common.util.GerantUtil;
 import com.gerant.zk.service.ZkService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -46,7 +47,7 @@ public class ZkServiceImpl implements ZkService {
     public void initZkc() {
         String localIp;
         try {
-            localIp = InetAddress.getLocalHost().getHostAddress();
+            localIp = GerantUtil.getLocalHost();
             logger.info("zk注册线程启动！信息，Ip->{},Port->{}",localIp,zkPort);
             //xxxxxxxx
             //zkc = new ZkClient(localIp+":"+zkPort);

@@ -16,7 +16,10 @@ public abstract class AbstractMqProducer {
 
     public abstract void start() throws MQClientException;
 
-    public abstract SendResult sendMessage(String message);
+    public  SendResult sendMessage(String message, String topic, String tag, String key){return null;}
+
+    @Deprecated
+    public  SendResult sendMessage(String message){return null ;};
 
     public abstract void shutdown();
 

@@ -38,7 +38,6 @@ public class McenterRpcClient {
                 // needing certificates.
                 .usePlaintext()
                 .build());
-        System.out.println(123);
     }
 
     public McenterApiServiceGrpc.McenterApiServiceBlockingStub getStub(){

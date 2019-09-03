@@ -6,7 +6,6 @@ import com.fireflyi.gn.gerant.client.core.GerantSocketclient;
 import com.fireflyi.gn.gerant.common.util.ProToBufBuild;
 import com.fireflyi.gn.gerant.domain.entity.GreqEntity;
 import com.fireflyi.gn.gerant.domain.enumentity.CmdIdEnum;
-import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.netty.channel.ChannelFuture;
@@ -66,8 +65,9 @@ public class UScanner {
         ChannelFuture future = gerantSocketclient.getFuture();
         Greq.Builder builder = ProToBufBuild.ProToBufBuild();
         builder.setCmdId(CmdIdEnum.ADMIN_TO_ALL.cmdId);
-        builder.setReqMsg("cliend,send protobuf消息");
-        for(int i=0;i<1;i++) {
+
+        for(int i=0;i<10;i++) {
+            builder.setReqMsg("cliend,send protobuf消息->"+i);
             ChannelFuture futures = future.channel().writeAndFlush(builder.build());
             futures.addListener((ChannelFutureListener) channelFuture ->
                     System.out.println("消息发送成功1"));

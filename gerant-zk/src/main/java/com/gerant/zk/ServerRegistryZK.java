@@ -3,6 +3,7 @@ package com.gerant.zk;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fireflyi.gerant.rpclient.route.vo.ServerNodeInfoVo;
+import com.fireflyi.gn.gerant.common.util.GerantUtil;
 import com.gerant.zk.service.ZkService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -31,7 +32,7 @@ public class ServerRegistryZK implements Runnable {
     @Override
     public void run() {
         //xxxxxxx
-        String localNode = "127.0.0.1:" + serverPort;
+        String localNode = GerantUtil.localHost();
         zkService.addLocalNode(rootNode + "/" + localNode, localNode);
         zkService.zkSubscribeEvent(rootNode);
     }

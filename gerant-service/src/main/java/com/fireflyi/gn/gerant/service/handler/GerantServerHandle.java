@@ -2,11 +2,14 @@ package com.fireflyi.gn.gerant.service.handler;
 
 import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.common.util.ProToBufBuild;
+import com.fireflyi.gn.gerant.core.cache.impl.LocalGuavaCache;
+import com.fireflyi.gn.gerant.core.cache.impl.LocalGuavaCacheSession;
 import com.fireflyi.gn.gerant.domain.enumentity.CmdIdEnum;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.fireflyi.gn.gerant.service.core.McenterRpcClient;
 import com.fireflyi.gn.gerant.service.service.RpcClient;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -24,21 +27,25 @@ import org.slf4j.LoggerFactory;
  */
 
 @ChannelHandler.Sharable
+@Singleton
 public class GerantServerHandle extends SimpleChannelInboundHandler<Greq> {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
     @Inject
-    RpcClient rpcClient;
+    private LocalGuavaCacheSession localGuavaCacheSession;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext,Greq greq) throws Exception {
         log.info("长连接服务收到, cmdId->"+greq.getCmdId()+"收到"+ greq.getReqMsg());
-        //rpcClient.mcenterRpcClient().mcPipline(greq);
 
+        //客户长连接注册到本机
+        if(greq.getCmdId().equals(CmdIdEnum.SOCKET_LOCAL_REGISTE.cmdId)){
+            localGuavaCacheSession.set(greq.getUid(), channelHandlerContext);
+            return ;
+        }
 
         McenterRpcClient ss = new McenterRpcClient("127.0.0.1",50051);
-
         ss.getStub().mcPipline(greq);
 
     }

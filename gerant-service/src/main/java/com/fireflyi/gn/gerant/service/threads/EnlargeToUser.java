@@ -12,10 +12,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class EnlargeToUser {
 
-
-
-    private ThreadPoolExecutor executor = new ThreadPoolExecutor(100, 100, 180L, TimeUnit.SECONDS, new LinkedBlockingQueue());
-
-
+    private static ThreadPoolExecutor executor = new ThreadPoolExecutor(100, 100, 180L, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
 }

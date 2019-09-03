@@ -14,10 +14,12 @@ import com.google.inject.Singleton;
 
 public class RpcClient {
 
+    public McenterApiServiceGrpc.McenterApiServiceBlockingStub stub;
+
     @Inject
-    public McenterApiServiceGrpc.McenterApiServiceBlockingStub mcenterRpcClient(){
+    public void mcenterRpcClient(){
         McenterRpcClient mcc = new McenterRpcClient("127.0.0.1",50051);
-        return mcc.getStub();
+        stub =  mcc.getStub();
     }
 
 }

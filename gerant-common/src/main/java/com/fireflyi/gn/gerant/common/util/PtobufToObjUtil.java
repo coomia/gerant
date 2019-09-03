@@ -21,4 +21,14 @@ public class PtobufToObjUtil {
         return entity;
     }
 
+    public static Greq objToGreq(GreqEntity obj1){
+        Greq.Builder req = Greq.newBuilder();
+        req.setCmdId(obj1.getCmdId());
+        req.setUid(obj1.getUid());
+        req.setObjId(obj1.getObjId());
+        req.setReqMsg(obj1.getReqMsg());
+        req.setTime(obj1.getTime());
+        return req.build();
+    }
+
 }

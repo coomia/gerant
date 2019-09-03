@@ -1,10 +1,19 @@
 package com.fireflyi.gn.gerant.core.consumer;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fireflyi.gn.gerant.common.util.GerantUtil;
+import com.fireflyi.gn.gerant.common.util.ProToBufBuild;
+import com.fireflyi.gn.gerant.common.util.PtobufToObjUtil;
 import com.fireflyi.gn.gerant.core.AbstractMqConsumer;
+import com.fireflyi.gn.gerant.core.cache.impl.LocalGuavaCacheSession;
 import com.fireflyi.gn.gerant.core.producer.McenterMqProducer;
+import com.fireflyi.gn.gerant.core.producer.NioMqProducer;
+import com.fireflyi.gn.gerant.core.producer.RouteMqProducer;
+import com.fireflyi.gn.gerant.domain.entity.GreqEntity;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -25,12 +34,15 @@ import java.util.List;
  * DESC TODO
  */
 @Singleton
-public class McenterMqConsumer extends AbstractMqConsumer {
+public class NioMqConsumer extends AbstractMqConsumer {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
-    McenterMqProducer mcenterMqProducer;
+    RouteMqProducer routeMqProducer;
+
+    @Inject
+    private LocalGuavaCacheSession localGuavaCacheSession;
 
     @Inject
     @Named("mq.rocket.nameserver.host")
@@ -45,12 +57,12 @@ public class McenterMqConsumer extends AbstractMqConsumer {
         consumer.setConsumeThreadMin(10);
         consumer.setConsumeThreadMax(10);
         //设置消费偏移规则 新的订阅组第一次启动从队列的最前位置开始
-        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-        consumer.setConsumerGroup("route_group_default");
-        consumer.setInstanceName("route_instance_default");
+        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
+        consumer.setConsumerGroup("nio_group_default_"+ GerantUtil.localHost());
+        consumer.setInstanceName("nio_instance_default");
         consumer.setNamesrvAddr(host+":"+port);
         //设置topic和tags
-        consumer.subscribe("mcenter_all_messages_topic","tagIP || aaa");
+        consumer.subscribe("nio_all_messages_topic","tagIP");
         consumer.registerMessageListener(new McenterToRouteListener());
         consumer.start();
     }
@@ -64,11 +76,19 @@ public class McenterMqConsumer extends AbstractMqConsumer {
             try {
                 Thread t = Thread.currentThread();
                 String name = t.getName();
-                logger.info(name+"msgBody={},msgId={},topic={},tags={}"
+                logger.info("nio推送消息"+name+"msgBody={},msgId={},topic={},tags={}"
                         , msgBody, msg.getMsgId(), msg.getTopic(), msg.getTags());
+
+                //推送消息
+                GreqEntity en1 = JSONObject.parseObject(msgBody, GreqEntity.class);
+                ChannelHandlerContext ctx = localGuavaCacheSession.get(en1.getUid());
+                //localGuavaCacheSession.
+                ctx.channel().writeAndFlush(PtobufToObjUtil.objToGreq(en1));
+                //
+
             } catch (Exception e) {
                 //重新放回去mq
-                mcenterMqProducer.sendMessage(msgBody);
+                routeMqProducer.sendMessage(msgBody);
             } finally {
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }

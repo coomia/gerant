@@ -13,6 +13,8 @@ public enum CmdIdEnum {
      */
     PONG("PONG","PONG"),
 
+    SOCKET_LOCAL_REGISTE("SOCKET_LOCAL_REGISTE","用户注册uid到nio集群节点"),
+
     USER_TO_USER("USER_TO_USER","用户之间消息"),
 
     USER_REGISTE("USER_REGISTE","用户注册，获取节点信息"),

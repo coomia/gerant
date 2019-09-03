@@ -1,15 +1,16 @@
 package com.fireflyi.gn.gerant.core.cache.impl;
 
 import com.fireflyi.gn.gerant.core.cache.LocalCacheService;
+import com.fireflyi.gn.gerant.core.cache.LocalCacheSession;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Singleton;
+import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author by fireflyi (6025606@qq.com)
@@ -18,13 +19,13 @@ import java.util.concurrent.TimeUnit;
  * DESC Guava Cache（LoadingCache)实现本地缓存，仅适用于route本机模式，集群请换memcache或者redis
  */
 @Singleton
-public class LocalGuavaCache implements LocalCacheService<String> {
+public class LocalGuavaCacheSession implements LocalCacheSession<String, ChannelHandlerContext> {
 
-    private static final Logger log = LoggerFactory.getLogger(LocalGuavaCache.class);
+    private static final Logger log = LoggerFactory.getLogger(LocalGuavaCacheSession.class);
 
-    private Cache<String, String> localCache;
+    private Cache<String, ChannelHandlerContext> localCache;
 
-    public LocalGuavaCache(){
+    public LocalGuavaCacheSession(){
         localCache = CacheBuilder.newBuilder()
                         .maximumSize(5000)
                         //.expireAfterWrite(0L, TimeUnit.MINUTES) // 设置缓存永不失效
@@ -35,18 +36,18 @@ public class LocalGuavaCache implements LocalCacheService<String> {
 
 
     @Override
-    public Boolean set(String key,String value) {
+    public Boolean set(String key,ChannelHandlerContext value) {
         localCache.put(key, value);
         return true;
     }
 
     @Override
-    public String get(String key) {
+    public ChannelHandlerContext get(String key) {
         try {
-            return localCache.get(key, new Callable<String>() {
+            return localCache.get(key, new Callable<ChannelHandlerContext>() {
                 @Override
-                public String call() throws Exception {
-                    return "0";
+                public ChannelHandlerContext call() throws Exception {
+                    return null;
                 }
             });
         } catch (ExecutionException e) {
