@@ -48,7 +48,7 @@ public class RouteMqProducer extends AbstractMqProducer {
         try {
             Message message = new Message(topic, tags, key, message1.getBytes(RemotingHelper.DEFAULT_CHARSET));
             SendResult result = producer.send(message);
-            log.info("nioMqProducer,result->{},tags->{},topic->{}",result.toString(),tags,topic);
+            log.info("路由中心推送消息到nio节点,result->{},tags->{},topic->{}",result.toString(),tags,topic);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

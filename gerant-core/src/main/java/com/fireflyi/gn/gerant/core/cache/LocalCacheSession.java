@@ -8,9 +8,11 @@ package com.fireflyi.gn.gerant.core.cache;
  */
 public interface LocalCacheSession<K, V> {
 
-    public Boolean set(K var1, V var2);
+     Boolean set(K var1, V var2);
 
-    public V get(K var);
+     V get(K var);
 
-    public Boolean del(K var);
+     V getLoad(K var);
+
+     Boolean del(K var);
 }

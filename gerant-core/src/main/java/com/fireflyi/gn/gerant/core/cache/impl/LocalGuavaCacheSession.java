@@ -6,6 +6,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.inject.Singleton;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,14 +17,14 @@ import java.util.concurrent.ExecutionException;
  * @author by fireflyi (6025606@qq.com)
  * @website https://www.fireflyi.com
  * @date 2019/8/7
- * DESC Guava Cache（LoadingCache)实现本地缓存，仅适用于route本机模式，集群请换memcache或者redis
+ * DESC Guava Cache（Cache)实现本地缓存，仅适用于route本机模式，集群请换memcache或者redis
  */
 @Singleton
-public class LocalGuavaCacheSession implements LocalCacheSession<String, ChannelHandlerContext> {
+public class LocalGuavaCacheSession implements LocalCacheSession<String, NioSocketChannel> {
 
     private static final Logger log = LoggerFactory.getLogger(LocalGuavaCacheSession.class);
 
-    private Cache<String, ChannelHandlerContext> localCache;
+    private static Cache<String, NioSocketChannel> localCache;
 
     public LocalGuavaCacheSession(){
         localCache = CacheBuilder.newBuilder()
@@ -36,17 +37,22 @@ public class LocalGuavaCacheSession implements LocalCacheSession<String, Channel
 
 
     @Override
-    public Boolean set(String key,ChannelHandlerContext value) {
+    public Boolean set(String key,NioSocketChannel value) {
         localCache.put(key, value);
         return true;
     }
 
     @Override
-    public ChannelHandlerContext get(String key) {
+    public NioSocketChannel get(String key) {
+        return localCache.getIfPresent(key);
+    }
+
+    @Override
+    public NioSocketChannel getLoad(String key) {
         try {
-            return localCache.get(key, new Callable<ChannelHandlerContext>() {
+            return localCache.get(key, new Callable<NioSocketChannel>() {
                 @Override
-                public ChannelHandlerContext call() throws Exception {
+                public NioSocketChannel call() throws Exception {
                     return null;
                 }
             });
@@ -61,5 +67,10 @@ public class LocalGuavaCacheSession implements LocalCacheSession<String, Channel
     public Boolean del(String key){
         localCache.invalidate(key);
         return true;
+    }
+
+    public static void main(String[] a){
+        LocalGuavaCacheSession lc = new LocalGuavaCacheSession();
+        NioSocketChannel res = lc.get("a");
     }
 }

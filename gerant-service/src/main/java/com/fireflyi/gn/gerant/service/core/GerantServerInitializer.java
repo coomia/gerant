@@ -4,6 +4,7 @@ import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gn.gerant.service.handler.GerantServerHandle;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.fireflyi.gn.gerant.service.handler.ServerIdleStateHandler;
+import com.fireflyi.gn.gerant.service.threads.NioMsgThreadsPool;
 import com.google.inject.Inject;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -21,8 +22,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class GerantServerInitializer extends ChannelInitializer<Channel> {
 
-    @Inject
-    private GerantServerHandle gerantServerHandle;
+    //@Inject
+    private GerantServerHandle gerantServerHandle = new GerantServerHandle();
 
     @Override
     protected void initChannel(Channel channel) throws Exception {

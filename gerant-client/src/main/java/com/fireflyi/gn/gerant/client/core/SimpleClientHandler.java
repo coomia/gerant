@@ -21,7 +21,7 @@ public class SimpleClientHandler extends SimpleChannelInboundHandler<Greq> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Greq msg) throws Exception {
-        System.out.println(msg.toString());
+        System.out.println("客户端收到消息"+msg.toString());
     }
 
     @Override

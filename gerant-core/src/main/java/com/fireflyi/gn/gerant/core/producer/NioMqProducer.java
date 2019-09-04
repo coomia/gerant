@@ -34,8 +34,8 @@ public class NioMqProducer extends AbstractMqProducer {
     @Override
     public void start() throws MQClientException {
         producer.setNamesrvAddr(host+":"+port);
-        producer.setInstanceName("nio_instance_default");
-        producer.setProducerGroup("nio_group__default");
+        producer.setInstanceName("nio_instance_default0");
+        producer.setProducerGroup("nio_group__default0");
         producer.setRetryAnotherBrokerWhenNotStoreOK(true);
         producer.setRetryTimesWhenSendAsyncFailed(5);
         producer.setRetryTimesWhenSendFailed(5);

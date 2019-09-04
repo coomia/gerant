@@ -4,6 +4,7 @@ import com.fireflyi.gn.gerant.core.cache.RedisClient;
 import com.fireflyi.gn.gerant.service.core.GerantServerInitializer;
 import com.fireflyi.gn.gerant.service.core.McenterRpcClient;
 import com.fireflyi.gn.gerant.service.service.RpcClient;
+import com.fireflyi.gn.gerant.service.threads.NioMsgThreadsPool;
 import com.gerant.zk.ServerRegistryZK;
 import com.gerant.zk.ZkApplication;
 import com.google.inject.Inject;
@@ -24,6 +25,9 @@ public class GerantSocketApplication {
 
     @Inject
     ServerRegistryZK serverRegistryZK;
+
+    @Inject
+    NioMsgThreadsPool nioMsgThreadsPool;
 
     @Inject
     @Named("base.server.port")

@@ -47,7 +47,7 @@ public class ZkServiceImpl implements ZkService {
     public void initZkc() {
         String localIp;
         try {
-            localIp = GerantUtil.getLocalHost();
+            localIp = GerantUtil.getLocalIp();
             logger.info("zk注册线程启动！信息，Ip->{},Port->{}",localIp,zkPort);
             //xxxxxxxx
             //zkc = new ZkClient(localIp+":"+zkPort);

@@ -24,7 +24,7 @@ public class SendToRocketmq implements SendToRoute<String> {
     @Override
     public boolean send(String var1) {
         mcenterMqProducer.sendMessage(var1);
-        log.info("Rocketmq收到消息中心消息,发到路由中心->{}",var1);
+        log.info("Rocketmq收到消息总站消息,发到路由中心->{}",var1);
         return true;
     }
 }

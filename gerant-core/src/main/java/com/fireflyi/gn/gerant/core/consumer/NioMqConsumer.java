@@ -13,7 +13,10 @@ import com.fireflyi.gn.gerant.domain.entity.GreqEntity;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
@@ -58,7 +61,8 @@ public class NioMqConsumer extends AbstractMqConsumer {
         consumer.setConsumeThreadMax(10);
         //设置消费偏移规则 新的订阅组第一次启动从队列的最前位置开始
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
-        consumer.setConsumerGroup("nio_group_default_"+ GerantUtil.localHost());
+        //consumer.setConsumerGroup("nio_group_default_"+ GerantUtil.localHost());
+        consumer.setConsumerGroup("nio_group_default_");
         consumer.setInstanceName("nio_instance_default");
         consumer.setNamesrvAddr(host+":"+port);
         //设置topic和tags
@@ -81,10 +85,11 @@ public class NioMqConsumer extends AbstractMqConsumer {
 
                 //推送消息
                 GreqEntity en1 = JSONObject.parseObject(msgBody, GreqEntity.class);
-                ChannelHandlerContext ctx = localGuavaCacheSession.get(en1.getUid());
-                //localGuavaCacheSession.
-                ctx.channel().writeAndFlush(PtobufToObjUtil.objToGreq(en1));
-                //
+                NioSocketChannel channel = localGuavaCacheSession.get(en1.getUid());
+                logger.error(en1.getUid());
+                ChannelFuture future = channel.writeAndFlush(PtobufToObjUtil.objToGreq(en1));
+                future.addListener((ChannelFutureListener) channelFuture ->
+                        logger.info("nio推送给客户端长连接成功！->{}", en1.toString()));
 
             } catch (Exception e) {
                 //重新放回去mq

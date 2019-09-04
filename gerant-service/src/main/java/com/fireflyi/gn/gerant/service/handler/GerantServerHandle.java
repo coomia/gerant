@@ -14,6 +14,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
@@ -27,21 +28,21 @@ import org.slf4j.LoggerFactory;
  */
 
 @ChannelHandler.Sharable
-@Singleton
 public class GerantServerHandle extends SimpleChannelInboundHandler<Greq> {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    @Inject
-    private LocalGuavaCacheSession localGuavaCacheSession;
+    private LocalGuavaCacheSession localGuavaCacheSession = new LocalGuavaCacheSession();
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext,Greq greq) throws Exception {
-        log.info("长连接服务收到, cmdId->"+greq.getCmdId()+"收到"+ greq.getReqMsg());
-
-        //客户长连接注册到本机
+    protected void channelRead0(ChannelHandlerContext ctx,Greq greq) throws Exception {
+        log.info("nio收到客户消息转发至消息总站, cmdId->"+greq.getCmdId()+"收到"+ greq.getReqMsg());
+        //客户长连接注册到本节点
         if(greq.getCmdId().equals(CmdIdEnum.SOCKET_LOCAL_REGISTE.cmdId)){
-            localGuavaCacheSession.set(greq.getUid(), channelHandlerContext);
+            Boolean r = localGuavaCacheSession.set(greq.getUid(), (NioSocketChannel) ctx.channel());
+            if(r){
+
+            }
             return ;
         }
 
