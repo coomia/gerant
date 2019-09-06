@@ -1,10 +1,9 @@
 package com.fireflyi.gn.gerant.client.core;
 
 import com.fireflyi.gerant.rpclient.protobuf.Greq;
-import com.fireflyi.gn.gerant.client.demo.UScanner;
+import com.fireflyi.gn.gerant.client.demo.SocketScanner;
 import com.fireflyi.gn.gerant.client.handler.ClientIdleStateHandler;
 import com.fireflyi.gn.gerant.core.GerantServerInfoService;
-import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -33,7 +32,7 @@ public class GerantSocketclient {
     private ChannelFuture future;
 
     @Inject
-    private UScanner uScanner;
+    private SocketScanner socketScanner;
 
     @Inject
     private GerantServerInfoService gerantServerInfoService;

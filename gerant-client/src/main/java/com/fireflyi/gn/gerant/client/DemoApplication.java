@@ -1,10 +1,8 @@
 package com.fireflyi.gn.gerant.client;
 
 import com.fireflyi.gn.gerant.client.core.GerantSocketclient;
-import com.fireflyi.gn.gerant.client.demo.UScanner;
+import com.fireflyi.gn.gerant.client.demo.SocketScanner;
 import com.google.inject.Inject;
-
-import java.util.Scanner;
 
 /**
  * @author by fireflyi (6025606@qq.com)
@@ -18,7 +16,7 @@ public class DemoApplication {
     private GerantSocketclient gerantSocketclient;
 
     @Inject
-    private UScanner uScanner;
+    private SocketScanner socketScanner;
 
 
 }

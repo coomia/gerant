@@ -5,9 +5,11 @@ import com.fireflyi.gn.gerant.common.util.ProToBufBuild;
 import com.fireflyi.gn.gerant.core.cache.impl.LocalGuavaCache;
 import com.fireflyi.gn.gerant.core.cache.impl.LocalGuavaCacheSession;
 import com.fireflyi.gn.gerant.domain.enumentity.CmdIdEnum;
+import com.fireflyi.gn.gerant.domain.enumentity.CodeEnum;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 import com.fireflyi.gn.gerant.service.core.McenterRpcClient;
 import com.fireflyi.gn.gerant.service.service.RpcClient;
+import com.fireflyi.gn.gerant.service.service.UserSocketService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.netty.channel.ChannelFutureListener;
@@ -32,22 +34,31 @@ public class GerantServerHandle extends SimpleChannelInboundHandler<Greq> {
 
     private Logger log = LoggerFactory.getLogger(getClass());
 
-    private LocalGuavaCacheSession localGuavaCacheSession = new LocalGuavaCacheSession();
+    @Inject
+    RpcClient rpcClient;
+
+    @Inject
+    UserSocketService userSocketService;
+
+    @Inject
+    private LocalGuavaCacheSession localGuavaCacheSession;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx,Greq greq) throws Exception {
-        log.info("nio收到客户消息转发至消息总站, cmdId->"+greq.getCmdId()+"收到"+ greq.getReqMsg());
+        log.info("socket节点收到客户消息并转发至消息总站, cmdId->"+greq.getCmdId()+"收到"+ greq.getReqMsg());
+
         //客户长连接注册到本节点
         if(greq.getCmdId().equals(CmdIdEnum.SOCKET_LOCAL_REGISTE.cmdId)){
-            Boolean r = localGuavaCacheSession.set(greq.getUid(), (NioSocketChannel) ctx.channel());
-            if(r){
-
+            Boolean regist = localGuavaCacheSession.set(greq.getUid(), (NioSocketChannel) ctx.channel());
+            if(!regist){
+                userSocketService.sendOneMsg(greq.getUid(), CodeEnum.CODE5001.code,"","注册失败请重试！", CodeEnum.STATUS0.code);
+                return ;
             }
+            userSocketService.sendOneMsg(greq.getUid(), CodeEnum.CODE2000.code,"","注册失败请重试！", CodeEnum.STATUS1.code);
             return ;
         }
 
-        McenterRpcClient ss = new McenterRpcClient("127.0.0.1",50051);
-        ss.getStub().mcPipline(greq);
+        rpcClient.mcenterStub.mcPipline(greq);
 
     }
 

@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class GerantServerInitializer extends ChannelInitializer<Channel> {
 
-    //@Inject
-    private GerantServerHandle gerantServerHandle = new GerantServerHandle();
+    @Inject
+    private GerantServerHandle gerantServerHandle;
 
     @Override
     protected void initChannel(Channel channel) throws Exception {

@@ -4,6 +4,7 @@ import com.fireflyi.gerant.rpclient.McenterApiServiceGrpc;
 import com.fireflyi.gn.gerant.service.core.McenterRpcClient;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
 /**
  * @author by fireflyi (6025606@qq.com)
@@ -11,15 +12,23 @@ import com.google.inject.Singleton;
  * @date 2019/9/2
  * DESC TODO
  */
-
+@Singleton
 public class RpcClient {
 
-    public McenterApiServiceGrpc.McenterApiServiceBlockingStub stub;
+    @Inject
+    @Named("mcenter.ip")
+    private String mcenterIp;
+
+    @Inject
+    @Named("mcenter.port")
+    private Integer mcenterPort;
+
+    public McenterApiServiceGrpc.McenterApiServiceBlockingStub mcenterStub;
 
     @Inject
     public void mcenterRpcClient(){
-        McenterRpcClient mcc = new McenterRpcClient("127.0.0.1",50051);
-        stub =  mcc.getStub();
+        McenterRpcClient mcc = new McenterRpcClient(mcenterIp, mcenterPort);
+        mcenterStub =  mcc.getStub();
     }
 
 }

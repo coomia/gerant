@@ -2,6 +2,7 @@ package com.fireflyi.gn.gerant.common.util;
 
 import com.fireflyi.gerant.rpclient.protobuf.Greq;
 import com.fireflyi.gerant.rpclient.protobuf.GreqPtc;
+import com.fireflyi.gerant.rpclient.protobuf.Gres;
 import com.fireflyi.gn.gerant.domain.enumentity.CmdIdEnum;
 import com.fireflyi.gn.gerant.domain.protobuf.GerantReqProtobuf;
 
@@ -48,6 +49,16 @@ public class ProToBufBuild {
         req.setObjId(objId);
         Greq request = req.build();
         return request;
+    }
+
+    public static final Gres buildRes(Integer code, String data, String resMsg, Integer status){
+        Gres.Builder res = Gres.newBuilder();
+        res.setCode(code);
+        res.setData(data);
+        res.setResMsg(resMsg);
+        res.setStatus(status);
+        Gres gres = res.build();
+        return gres;
     }
 
 }

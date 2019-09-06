@@ -13,7 +13,9 @@ import io.netty.channel.ChannelFutureListener;
 
 import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.*;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author by fireflyi (6025606@qq.com)
@@ -22,7 +24,7 @@ import java.util.concurrent.*;
  * DESC TODO
  */
 @Singleton
-public class UScanner {
+public class RpcScanner {
 
     private ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue());
 
@@ -53,9 +55,6 @@ public class UScanner {
         if(!jobj.getCmdId().equals(CmdIdEnum.USER_REGISTE.cmdId)){
             return ;
         }
-
-
-
     }
 
     //{"cmdId":"SOCKET_LOCAL_REGISTE","uid":"5566"}

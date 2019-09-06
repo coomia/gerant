@@ -30,6 +30,9 @@ public class GerantSocketApplication {
     NioMsgThreadsPool nioMsgThreadsPool;
 
     @Inject
+    GerantServerInitializer gerantServerInitializer;
+
+    @Inject
     @Named("base.server.port")
     private Integer PORT;
 
@@ -42,7 +45,7 @@ public class GerantSocketApplication {
             ServerBootstrap b = new ServerBootstrap();
             b.group(boosGroup, workGroup);
             b.channel(NioServerSocketChannel.class);
-            b.childHandler(new GerantServerInitializer());
+            b.childHandler(gerantServerInitializer);
 
             Channel ch = b.bind(PORT).sync().channel();
 
