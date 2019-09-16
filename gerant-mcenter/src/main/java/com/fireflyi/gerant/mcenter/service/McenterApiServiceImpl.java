@@ -48,7 +48,7 @@ public class McenterApiServiceImpl  extends McenterApiServiceGrpc.McenterApiServ
         //异步处理消息
         executor.execute(()-> doHandlers(req));
         //直接返回客户端res
-        Gres reply = Gres.newBuilder().setResMsg("来自服务端的信息->111111 " + req.getReqMsg()).build();
+        Gres reply = Gres.newBuilder().setResMsg("来自服务端的信息->" + req.getReqMsg()).build();
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
 

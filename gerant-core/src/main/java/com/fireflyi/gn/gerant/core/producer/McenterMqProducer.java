@@ -44,6 +44,22 @@ public class McenterMqProducer extends AbstractMqProducer {
     }
 
     @Override
+    public  SendResult sendMessage(String message1, String topic, String tags, String key){
+//        String topic = "mcenter_all_messages_topic";
+//        String tags = "tagIP";
+//        String key = "id";
+        try {
+            Message message = new Message(topic, tags, key, message1.getBytes(RemotingHelper.DEFAULT_CHARSET));
+            SendResult result = producer.send(message);
+            log.info("McenterMqProducer,result->{},tags->{},topic->{}",result.toString(),tags,topic);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public SendResult sendMessage(String message1) {
         String topic = "mcenter_all_messages_topic";
         String tags = "tagIP";
