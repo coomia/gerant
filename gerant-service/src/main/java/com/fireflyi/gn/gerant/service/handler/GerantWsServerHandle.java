@@ -1,5 +1,6 @@
 package com.fireflyi.gn.gerant.service.handler;
 
+import com.fireflyi.gn.gerant.common.util.WsUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -7,9 +8,10 @@ import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
-import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
+import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
+
+import java.io.UnsupportedEncodingException;
 
 /**
  * @author by lishihao
@@ -24,8 +26,64 @@ public class GerantWsServerHandle extends SimpleChannelInboundHandler<Object> {
     private static final String WEB_SOCKET_URL = "ws://127.0.0.1:8666/ws";
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
+    protected void channelRead0(ChannelHandlerContext context, Object msg) throws Exception {
+        System.out.println("有新消息");
+        //处理客户端向服务端发起http握手请求业务
+        if (msg instanceof FullHttpRequest) {
+            handHttpRequest(context, (FullHttpRequest) msg);
+        } else if (msg instanceof WebSocketFrame) {//处理websocket连接业务
+            handWebsocketFrame(context, (WebSocketFrame) msg);
+        }
+    }
 
+    /**
+     * 处理客户端与服务端websocket业务
+     *
+     * @param ctx
+     * @param frame
+     */
+    public void handWebsocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) throws UnsupportedEncodingException {
+        String fromChannelid = ctx.channel().id().toString();
+
+        //判断是否是关闭websocket的指令
+        if (frame instanceof CloseWebSocketFrame) {
+            handshaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
+        }
+
+        //判断是否是ping消息
+        if (frame instanceof PingWebSocketFrame) {
+            System.out.println("ping消息");
+            ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
+        }
+
+
+
+        if(frame instanceof BinaryWebSocketFrame){
+            System.out.println("收到二进制数据");
+
+            BinaryWebSocketFrame binaryWebSocketFrame = (BinaryWebSocketFrame) frame;
+            ByteBuf content = binaryWebSocketFrame.content();
+
+            //ByteBuf转String
+            byte[] req = new byte[content.readableBytes()];
+            content.readBytes(req);
+            String body = new String(req,"UTF-8");
+            System.out.println("二进制数据->"+content+",转str->"+body);
+            WsUtils.flushFileByte2(body,"./ss.jpeg");
+
+            //String转ByteBuf
+            String msg = "服务端收到信息->"+body;
+            byte[] bytes = msg.getBytes(CharsetUtil.UTF_8);
+            ByteBuf buf = Unpooled.wrappedBuffer(bytes);
+            ctx.writeAndFlush(new BinaryWebSocketFrame(buf));
+            return ;
+        }
+
+
+        //返回应答消息
+        //获取客户端向服务端发送的消息
+        String request = (((TextWebSocketFrame) frame).text()).replaceAll("[\\s*\\t\\n\\r]", "");
+        System.out.println("客户端消息"+request);
     }
 
     @Override
