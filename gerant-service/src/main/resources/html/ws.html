@@ -29,6 +29,24 @@
 
             //ws.send(bin);
          }
+
+         function sen_pic(){
+           var files = $('#send-pic')[0].files;
+           console.log(11)
+           if (files && files.length) {
+            console.log(22)
+               var file = files[0];
+               var fileReader = new FileReader();
+               fileReader.readAsArrayBuffer(file);
+               fileReader.onload = function (e) {
+                   // 获取到文件对象
+                   var result = e.target.result;
+                   // 发送数据到服务器端
+                   ws.send(result)
+               }
+            }
+         }
+
       </script>
 </head>
 <body>
@@ -45,9 +63,15 @@
 <div>
     <input id="biny" type="text" name="biny"><button onclick="biny()">发送二进制数据</button>
 </div>
+
+<div>
+    选择图片： <input type="file" id="send-pic"><button onclick="sen_pic()" >发送图片</button>
+
+</div>
 </body>
 
 <script type="text/javascript">
+
    WebSocketTest()
     function WebSocketTest(){
             if ("WebSocket" in window){
