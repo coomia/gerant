@@ -21,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 @ChannelHandler.Sharable
 public class GerantWsServerHandle extends SimpleChannelInboundHandler<Object> {
 
+    private int MAGIC_BIN_NUM = 0x654321;
+
     private WebSocketServerHandshaker handshaker;
 
     private static final String WEB_SOCKET_URL = "ws://127.0.0.1:8666/ws";
@@ -34,6 +36,25 @@ public class GerantWsServerHandle extends SimpleChannelInboundHandler<Object> {
         } else if (msg instanceof WebSocketFrame) {//处理websocket连接业务
             handWebsocketFrame(context, (WebSocketFrame) msg);
         }
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("有新链接");
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("链接断开");
+        ctx.close() ;
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        //异常时断开连接
+        System.out.println("异常链接断开");
+        cause.printStackTrace() ;
+        ctx.close() ;
     }
 
     /**
@@ -56,29 +77,11 @@ public class GerantWsServerHandle extends SimpleChannelInboundHandler<Object> {
             ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
         }
 
-
-
         if(frame instanceof BinaryWebSocketFrame){
             System.out.println("收到二进制数据");
-
-            BinaryWebSocketFrame binaryWebSocketFrame = (BinaryWebSocketFrame) frame;
-            ByteBuf content = binaryWebSocketFrame.content();
-
-            //ByteBuf转String
-            byte[] req = new byte[content.readableBytes()];
-            content.readBytes(req);
-            String body = new String(req,"UTF-8");
-            System.out.println("二进制数据->"+content+",转str->"+body);
-            WsUtils.flushFileByte2(body,"./ss.jpeg");
-
-            //String转ByteBuf
-            String msg = "服务端收到信息->"+body;
-            byte[] bytes = msg.getBytes(CharsetUtil.UTF_8);
-            ByteBuf buf = Unpooled.wrappedBuffer(bytes);
-            ctx.writeAndFlush(new BinaryWebSocketFrame(buf));
-            return ;
+            binaryWebSocketFrame(ctx, frame);
+            return;
         }
-
 
         //返回应答消息
         //获取客户端向服务端发送的消息
@@ -86,24 +89,75 @@ public class GerantWsServerHandle extends SimpleChannelInboundHandler<Object> {
         System.out.println("客户端消息"+request);
     }
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("有新链接");
+
+    public void binaryWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame){
+        BinaryWebSocketFrame msg = (BinaryWebSocketFrame) frame;
+        ByteBuf content = msg.content();
+        byte[] byteWS = new byte[content.readableBytes()];
+        content.readBytes(byteWS);//ByteBuf转字节数组
+        //协议头校验
+        if(!protocol(content)){ return; }
+        //协议文件扩展类型
+        byte[] extByte = subBytes(byteWS, 4, 1);
+        String ext = byteToExt(extByte);
+        byte[] imgByte = subBytes(byteWS, 5, byteWS.length-5);
+        //字节流写文件
+        WsUtils.writeFile(imgByte, ext);
     }
 
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("链接断开");
-        ctx.close() ;
+    /**
+     * 协议头
+     * @param content
+     * @return
+     */
+    private boolean protocol(ByteBuf content){
+        int protocolCode = content.getInt(0);
+        System.out.println("protocolCode->"+protocolCode);
+        if(protocolCode == MAGIC_BIN_NUM){
+            return true;
+        }
+        return false;
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        //异常时断开连接
-        System.out.println("异常链接断开");
-        cause.printStackTrace() ;
-        ctx.close() ;
+    /**
+     * 解析协议头，文件扩展类型
+     * @param bytes
+     * @return
+     */
+    public String byteToExt(byte[] bytes) {
+        return WsUtils.extCodeToType(bytes[0]);
     }
+
+    /**
+     * 截取字节数组
+     * @param src
+     * @param begin
+     * @param count
+     * @return
+     */
+    public byte[] subBytes(byte[] src, int begin, int count) {
+        byte[] bs = new byte[count];
+        System.out.println(src.length+"src");
+        for (int i=begin;i<begin+count; i++) bs[i-begin] = src[i];
+        return bs;
+    }
+
+    /**
+     * 解析协议
+     * @param bytes
+     * @return
+     */
+    public int byteArrayToInt(byte[] bytes) {
+        int value=0;
+        for(int i = 0; i < 4; i++) {
+            int shift= (4-1-i) * 8;
+            value +=(bytes[i] & 0x000000FF) << shift;//往高位游
+        }
+        return value;
+    }
+
+
+
 
     /**
      * 处理客户端向服务端发起http握手请求的业务
