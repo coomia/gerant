@@ -47,6 +47,20 @@
             }
          }
 
+    function ab2str(u,f) {
+         var b = new Blob([u]);
+         var r = new FileReader();
+          r.readAsText(b, 'utf-8');
+          r.onload = function (){if(f)f.call(null,r.result)}
+      }
+      //字符串转字符串ArrayBuffer
+      function str2ab(s,f) {
+          var b = new Blob([s],{type:'text/plain'});
+          var r = new FileReader();
+          r.readAsArrayBuffer(b);
+          r.onload = function (){if(f)f.call(null,r.result)}
+      }
+
       </script>
 </head>
 <body>
@@ -94,7 +108,7 @@
 
                };
                ws.onclose = function(){
-                  alert("连接已关闭...");
+                  console.log("连接已关闭...");
                };
             }
          }
